@@ -1,0 +1,89 @@
+import { Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Code2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { MarketplaceFooter } from '@/components/marketplace/MarketplaceFooter';
+
+const schema = z
+  .object({
+    name: z.string().min(1, 'Name is required'),
+    email: z.string().email('Invalid email'),
+    password: z.string().min(6, 'Password must be at least 6 characters'),
+    confirm: z.string(),
+  })
+  .refine((d) => d.password === d.confirm, {
+    message: 'Passwords do not match',
+    path: ['confirm'],
+  });
+
+type FormData = z.infer<typeof schema>;
+
+export const RegisterPage = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({ resolver: zodResolver(schema) });
+
+  const onSubmit = () => {
+    // UI placeholder — no registration API
+  };
+
+  return (
+    <div className="flex min-h-screen flex-col bg-gray-50">
+      <div className="flex flex-1 items-center justify-center px-4 py-12">
+        <Card className="w-full max-w-md border-gray-100 shadow-lg">
+          <CardHeader className="text-center">
+            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100">
+              <Code2 className="h-6 w-6 text-blue-600" />
+            </div>
+            <CardTitle className="text-2xl">Create Account</CardTitle>
+            <p className="text-sm text-gray-500">Join Code Market AI</p>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="name">Full Name</Label>
+                <Input id="name" {...register('name')} />
+                {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" type="email" {...register('email')} />
+                {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <Input id="password" type="password" {...register('password')} />
+                {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="confirm">Confirm Password</Label>
+                <Input id="confirm" type="password" {...register('confirm')} />
+                {errors.confirm && <p className="text-sm text-red-500">{errors.confirm.message}</p>}
+              </div>
+              <Button type="submit" className="w-full bg-gray-900 hover:bg-gray-800">
+                Create Account
+              </Button>
+            </form>
+            <p className="mt-6 text-center text-sm text-gray-500">
+              Already have an account?{' '}
+              <Link to="/admin/login" className="font-medium text-blue-600 hover:underline">
+                Sign in
+              </Link>
+            </p>
+            <p className="mt-2 text-center text-xs text-gray-400">
+              Registration is a UI preview. Admin login is available.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+      <MarketplaceFooter />
+    </div>
+  );
+};

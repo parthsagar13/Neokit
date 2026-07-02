@@ -23,7 +23,7 @@ export const AdminSidebar = () => {
     <aside className="flex h-screen w-64 flex-col border-r border-gray-200 bg-white">
       <div className="flex items-center gap-2 border-b border-gray-200 px-6 py-5">
         <Code2 className="h-6 w-6 text-blue-600" />
-        <span className="text-lg font-bold">CodeMarket</span>
+        <span className="text-lg font-bold">Code Market AI</span>
       </div>
 
       <nav className="flex-1 space-y-1 p-4">

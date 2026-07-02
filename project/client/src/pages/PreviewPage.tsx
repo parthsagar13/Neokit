@@ -63,7 +63,7 @@ export const PreviewPage = () => {
       <header className="flex items-center justify-between border-b border-gray-200 bg-white px-4 py-3">
         <div className="flex items-center gap-4">
           <Button asChild variant="ghost" size="sm">
-            <Link to="/">
+            <Link to={`/templates/${template.slug}`}>
               <ArrowLeft className="h-4 w-4" />
               Back
             </Link>
@@ -89,7 +89,7 @@ export const PreviewPage = () => {
               Open
             </a>
           </Button>
-          <Button size="sm" onClick={handleDownload} disabled={downloading}>
+          <Button size="sm" className="bg-gray-900 hover:bg-gray-800" onClick={handleDownload} disabled={downloading}>
             <Download className="h-4 w-4" />
             {downloading ? 'Downloading...' : 'Download ZIP'}
           </Button>
