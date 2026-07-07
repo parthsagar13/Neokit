@@ -56,6 +56,26 @@ export const CheckoutPage = () => {
         order_id: orderData.orderId,
         prefill: { name: user.name, email: user.email },
         theme: { color: '#111827' },
+        method: {
+          upi: true,
+          card: true,
+          netbanking: true,
+          wallet: true,
+        },
+        config: {
+          display: {
+            blocks: {
+              upi: {
+                name: 'Pay via UPI',
+                instruments: [{ method: 'upi' }],
+              },
+            },
+            sequence: ['block.upi'],
+            preferences: {
+              show_default_blocks: true,
+            },
+          },
+        },
         handler: async (response: {
           razorpay_order_id: string;
           razorpay_payment_id: string;
