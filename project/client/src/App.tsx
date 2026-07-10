@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from '@/context/AuthContext';
 import { UserAuthProvider } from '@/context/UserAuthContext';
+import { GoogleAuthProvider } from '@/components/auth/GoogleAuthProvider';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { UserProtectedRoute } from '@/components/UserProtectedRoute';
 import { AdminLayout } from '@/components/admin/AdminLayout';
@@ -41,6 +42,7 @@ function App() {
   return (
     <AuthProvider>
       <UserAuthProvider>
+        <GoogleAuthProvider>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<LandingPage />} />
@@ -91,6 +93,7 @@ function App() {
           </Routes>
         </BrowserRouter>
         <Toaster position="top-right" />
+        </GoogleAuthProvider>
       </UserAuthProvider>
     </AuthProvider>
   );

@@ -1,17 +1,22 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import toast from 'react-hot-toast';
-import { Code2, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
+import { NeokitIcon } from '@/components/brand/NeokitIcon';
+import { AuthDivider } from '@/components/auth/AuthDivider';
+import { GoogleSignInButton } from '@/components/auth/GoogleSignInButton';
 import { authApi } from '@/services/api';
 import { useUserAuth } from '@/context/UserAuthContext';
+import { useGoogleAuth } from '@/hooks/useGoogleAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { MarketplaceFooter } from '@/components/marketplace/MarketplaceFooter';
+import { isGoogleAuthEnabled } from '@/lib/googleAuth';
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -22,8 +27,13 @@ type LoginForm = z.infer<typeof loginSchema>;
 
 export const LoginPage = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { login } = useUserAuth();
+  const { handleGoogleSuccess } = useGoogleAuth();
   const [loading, setLoading] = useState(false);
+
+  const redirectTo = searchParams.get('redirect') || '/dashboard';
+  const registerHref = redirectTo === '/dashboard' ? '/register' : `/register?redirect=${encodeURIComponent(redirectTo)}`;
 
   const {
     register,
@@ -44,7 +54,7 @@ export const LoginPage = () => {
       }
       login(response.token, response.user);
       toast.success('Welcome back!');
-      navigate('/dashboard');
+      navigate(redirectTo);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Login failed');
     } finally {
@@ -58,7 +68,7 @@ export const LoginPage = () => {
         <Card className="w-full max-w-md border-gray-100 shadow-lg">
           <CardHeader className="text-center">
             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100">
-              <Code2 className="h-6 w-6 text-blue-600" />
+              <NeokitIcon className="h-8 w-8" />
             </div>
             <CardTitle className="text-2xl">Sign In</CardTitle>
             <p className="text-sm text-gray-500">Access your purchases and downloads</p>
@@ -84,9 +94,17 @@ export const LoginPage = () => {
                 {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Sign In'}
               </Button>
             </form>
+
+            {isGoogleAuthEnabled && (
+              <>
+                <AuthDivider />
+                <GoogleSignInButton onSuccess={handleGoogleSuccess} disabled={loading} />
+              </>
+            )}
+
             <p className="mt-6 text-center text-sm text-gray-500">
               Don&apos;t have an account?{' '}
-              <Link to="/register" className="font-medium text-blue-600 hover:underline">
+              <Link to={registerHref} className="font-medium text-blue-600 hover:underline">
                 Create account
               </Link>
             </p>

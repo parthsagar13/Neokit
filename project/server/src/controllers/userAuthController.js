@@ -7,12 +7,31 @@ import {
   hashResetToken,
   sendForgotPasswordEmail,
 } from '../services/emailService.js';
+import {
+  isGoogleAuthConfigured,
+  verifyGoogleAuthCode,
+  verifyGoogleIdToken,
+} from '../services/googleAuthService.js';
 
 const signUserToken = (userId) =>
   jwt.sign({ id: userId, role: 'user' }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
 const signAdminToken = (adminId) =>
   jwt.sign({ id: adminId, role: 'admin' }, process.env.JWT_SECRET, { expiresIn: '7d' });
+
+const formatUserResponse = (user) => ({
+  id: user._id,
+  name: user.name,
+  email: user.email,
+  role: user.role,
+  avatar: user.avatar || undefined,
+  provider: user.provider || 'email',
+});
+
+const touchLastLogin = async (user) => {
+  user.lastLogin = new Date();
+  await user.save();
+};
 
 export const register = async (req, res, next) => {
   try {
@@ -33,13 +52,16 @@ export const register = async (req, res, next) => {
       name: name.trim(),
       email: email.toLowerCase().trim(),
       password,
+      provider: 'email',
+      isVerified: false,
+      lastLogin: new Date(),
     });
 
     const token = signUserToken(user._id);
 
     res.status(201).json({
       token,
-      user: { id: user._id, name: user.name, email: user.email, role: user.role },
+      user: formatUserResponse(user),
     });
   } catch (err) {
     next(err);
@@ -57,15 +79,23 @@ export const login = async (req, res, next) => {
 
     const user = await User.findOne({ email: normalizedEmail }).select('+password');
     if (user) {
+      if (!user.password) {
+        return res.status(401).json({
+          message: 'This account uses Google sign-in. Please continue with Google.',
+        });
+      }
+
       const valid = await user.comparePassword(password);
       if (!valid) {
         return res.status(401).json({ message: 'Invalid credentials' });
       }
 
+      await touchLastLogin(user);
+
       const token = signUserToken(user._id);
       return res.json({
         token,
-        user: { id: user._id, name: user.name, email: user.email, role: user.role },
+        user: formatUserResponse(user),
       });
     }
 
@@ -143,6 +173,7 @@ export const resetPassword = async (req, res, next) => {
     }
 
     user.password = password;
+    user.provider = user.googleId ? user.provider : 'email';
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;
     await user.save();
@@ -153,19 +184,87 @@ export const resetPassword = async (req, res, next) => {
   }
 };
 
-export const googleLoginPlaceholder = async (_req, res) => {
-  res.status(501).json({
-    message: 'Google login is not yet configured. Architecture is ready — integrate OAuth provider.',
-  });
+export const googleLogin = async (req, res, next) => {
+  try {
+    if (!isGoogleAuthConfigured()) {
+      return res.status(503).json({ message: 'Google login is not configured on the server' });
+    }
+
+    const { credential, code } = req.body;
+    if (!credential && !code) {
+      return res.status(400).json({ message: 'Google credential or authorization code is required' });
+    }
+
+    let googleProfile;
+    try {
+      googleProfile = credential
+        ? await verifyGoogleIdToken(credential)
+        : await verifyGoogleAuthCode(code);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Google authentication failed';
+
+      if (/expired/i.test(message)) {
+        return res.status(401).json({ message: 'Google session expired. Please try again.' });
+      }
+
+      if (/audience|issuer|invalid/i.test(message)) {
+        return res.status(401).json({ message: 'Invalid Google token. Please try again.' });
+      }
+
+      return res.status(401).json({ message: 'Google authentication failed. Please try again.' });
+    }
+
+    let user = await User.findOne({ googleId: googleProfile.googleId });
+
+    if (user) {
+      if (googleProfile.avatar) user.avatar = googleProfile.avatar;
+      user.isVerified = true;
+      await touchLastLogin(user);
+    } else {
+      user = await User.findOne({ email: googleProfile.email });
+
+      if (user) {
+        if (user.googleId && user.googleId !== googleProfile.googleId) {
+          return res.status(409).json({
+            message: 'This email is already linked to a different Google account',
+          });
+        }
+
+        user.googleId = googleProfile.googleId;
+        if (googleProfile.avatar) user.avatar = googleProfile.avatar;
+        user.isVerified = true;
+        await touchLastLogin(user);
+      } else {
+        user = await User.create({
+          name: googleProfile.name,
+          email: googleProfile.email,
+          googleId: googleProfile.googleId,
+          avatar: googleProfile.avatar,
+          provider: 'google',
+          isVerified: googleProfile.emailVerified,
+          lastLogin: new Date(),
+        });
+      }
+    }
+
+    const token = signUserToken(user._id);
+
+    res.json({
+      token,
+      user: formatUserResponse(user),
+    });
+  } catch (err) {
+    if (err?.code === 11000) {
+      return res.status(409).json({ message: 'An account with this email already exists' });
+    }
+    next(err);
+  }
 };
 
 export const getMe = async (req, res) => {
   res.json({
     user: {
-      id: req.user._id,
-      name: req.user.name,
-      email: req.user.email,
-      role: req.user.role,
+      ...formatUserResponse(req.user),
     },
   });
 };

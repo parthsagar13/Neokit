@@ -169,7 +169,7 @@ export const LandingPage = () => {
             <h2 className="text-3xl font-bold sm:text-4xl">Engineered for Modern Teams</h2>
             <p className="mt-4 text-gray-400">
               Every template is reviewed for code quality, performance, and maintainability before
-              listing on Code Market AI.
+              listing on Neokit.
             </p>
             <ul className="mt-8 space-y-4">
               {[

@@ -9,6 +9,8 @@ import { templateApi, paymentApi } from '@/services/api';
 import { useUserAuth } from '@/context/UserAuthContext';
 import { loadRazorpayScript } from '@/lib/razorpay';
 import { formatPrice } from '@/lib/format';
+import { BRAND_NAME } from '@/lib/brand';
+import { NeokitWordmark } from '@/components/brand/NeokitLogo';
 import type { Template } from '@/types';
 
 export const CheckoutPage = () => {
@@ -51,7 +53,7 @@ export const CheckoutPage = () => {
         key: orderData.keyId,
         amount: Math.round((orderData.amount || 0) * 100),
         currency: orderData.currency || 'INR',
-        name: 'Code Market',
+        name: BRAND_NAME,
         description: template.title,
         order_id: orderData.orderId,
         prefill: { name: user.name, email: user.email },
@@ -120,7 +122,7 @@ export const CheckoutPage = () => {
     <div className="min-h-screen bg-gray-50">
       <header className="border-b border-gray-100 bg-white">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-          <span className="text-lg font-bold">Code Market AI</span>
+          <NeokitWordmark className="h-10" />
           <span className="flex items-center gap-2 text-sm text-gray-500">
             <Lock className="h-4 w-4" />
             Secure Checkout

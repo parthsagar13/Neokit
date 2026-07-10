@@ -266,7 +266,7 @@ export const TemplateDetailsPage = () => {
                   CM
                 </div>
                 <div>
-                  <p className="font-semibold text-gray-900">CodeMarket</p>
+                  <p className="font-semibold text-gray-900">Neokit</p>
                   <p className="text-xs text-gray-500">Elite Author</p>
                 </div>
               </div>

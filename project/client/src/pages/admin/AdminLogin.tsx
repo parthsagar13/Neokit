@@ -4,7 +4,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import toast from 'react-hot-toast';
-import { Code2, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
+import { NeokitIcon } from '@/components/brand/NeokitIcon';
 import { authApi } from '@/services/api';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -64,16 +65,16 @@ export const AdminLogin = () => {
         <Card className="w-full max-w-md border-gray-100 shadow-lg">
           <CardHeader className="text-center">
             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100">
-              <Code2 className="h-6 w-6 text-blue-600" />
+              <NeokitIcon className="h-8 w-8" />
             </div>
             <CardTitle className="text-2xl">Sign In</CardTitle>
-            <p className="text-sm text-gray-500">Admin access to Code Market AI</p>
+            <p className="text-sm text-gray-500">Admin access to Neokit</p>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="admin@codemarket.ai" {...register('email')} />
+                <Input id="email" type="email" placeholder="admin@neokit.com" {...register('email')} />
                 {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
               </div>
               <div className="space-y-2">

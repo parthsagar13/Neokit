@@ -23,17 +23,17 @@ const faqs = [
   },
   {
     q: 'Do you offer refunds?',
-    a: 'CodeMarket sells digital products. Refunds are considered for specific cases such as duplicate payments, technical errors, corrupted ZIP files, or product not delivered after successful payment. See the Refund Policy for details.',
+    a: 'Neokit sells digital products. Refunds are considered for specific cases such as duplicate payments, technical errors, corrupted ZIP files, or product not delivered after successful payment. See the Refund Policy for details.',
   },
 ];
 
 export const ContactPage = () => (
   <div className="min-h-screen bg-white">
     <Seo
-      title="Contact CodeMarket | Support & Sales"
-      description="Contact CodeMarket for support, licensing, billing, and sales inquiries. Get help with downloads, invoices, and template setup."
+      title="Contact Neokit | Support & Sales"
+      description="Contact Neokit for support, licensing, billing, and sales inquiries. Get help with downloads, invoices, and template setup."
       canonicalPath="/contact"
-      ogTitle="Contact CodeMarket"
+      ogTitle="Contact Neokit"
       ogDescription="Support and sales contact details, response times, and FAQs."
     />
     <MarketplaceNavbar showSearch={false} />

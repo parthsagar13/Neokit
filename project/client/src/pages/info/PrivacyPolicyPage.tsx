@@ -10,7 +10,7 @@ import { Seo } from '@/components/info/Seo';
 const faqs = [
   {
     q: 'Do you store my card or UPI PIN?',
-    a: 'No. Payments are processed by Razorpay. We do not store card numbers, UPI PINs, or sensitive payment authentication data on CodeMarket servers.',
+    a: 'No. Payments are processed by Razorpay. We do not store card numbers, UPI PINs, or sensitive payment authentication data on Neokit servers.',
   },
   {
     q: 'How do secure downloads work?',
@@ -25,11 +25,11 @@ const faqs = [
 export const PrivacyPolicyPage = () => (
   <div className="min-h-screen bg-white">
     <Seo
-      title="Privacy Policy | CodeMarket"
-      description="Read CodeMarket’s Privacy Policy covering the information we collect, how we use it, third-party services (Razorpay, Supabase), security practices, retention, and your rights."
+      title="Privacy Policy | Neokit"
+      description="Read Neokit’s Privacy Policy covering the information we collect, how we use it, third-party services (Razorpay, Supabase), security practices, retention, and your rights."
       canonicalPath="/privacy-policy"
-      ogTitle="CodeMarket Privacy Policy"
-      ogDescription="How CodeMarket collects, uses, and protects your data."
+      ogTitle="Neokit Privacy Policy"
+      ogDescription="How Neokit collects, uses, and protects your data."
     />
     <MarketplaceNavbar showSearch={false} />
 
@@ -41,7 +41,7 @@ export const PrivacyPolicyPage = () => (
           Privacy, built with <span className="text-blue-600">trust</span>.
         </>
       }
-      description="This Privacy Policy explains what information CodeMarket collects, how it is used, and the choices you have when using our marketplace."
+      description="This Privacy Policy explains what information Neokit collects, how it is used, and the choices you have when using our marketplace."
       primaryCta={{ label: 'Browse Templates', to: '/templates' }}
       secondaryCta={{ label: 'Contact', to: '/contact' }}
     />
@@ -49,7 +49,7 @@ export const PrivacyPolicyPage = () => (
     <main className="mx-auto max-w-5xl px-4 py-14 sm:px-6">
       <div className="rounded-3xl border border-gray-100 bg-white p-8 shadow-sm">
         <p className="text-sm text-gray-500">
-          Effective date: {new Date().toLocaleDateString()} · CodeMarket is a premium digital template marketplace.
+          Effective date: {new Date().toLocaleDateString()} · Neokit is a premium digital template marketplace.
         </p>
 
         <section className="mt-10">
@@ -82,7 +82,7 @@ export const PrivacyPolicyPage = () => (
           <SectionTitle
             eyebrow="Payment information"
             title="Payments are processed securely"
-            description="CodeMarket uses Razorpay to process payments. We receive confirmation identifiers and transaction status, not sensitive payment credentials."
+            description="Neokit uses Razorpay to process payments. We receive confirmation identifiers and transaction status, not sensitive payment credentials."
           />
           <div className="mt-6 rounded-2xl border border-gray-100 bg-gray-50 p-6 text-sm text-gray-600">
             <p className="font-semibold text-gray-900">What we may store</p>
@@ -129,7 +129,7 @@ export const PrivacyPolicyPage = () => (
           <SectionTitle
             eyebrow="Google login"
             title="Google login support (architecture ready)"
-            description="CodeMarket has architecture support for Google login. If enabled in the future, we will update this policy to reflect the specific data used from Google (such as your email and profile name)."
+            description="Neokit has architecture support for Google login. If enabled in the future, we will update this policy to reflect the specific data used from Google (such as your email and profile name)."
           />
           <div className="mt-6 rounded-2xl border border-gray-100 bg-white p-6 text-sm text-gray-600">
             <p>
@@ -157,7 +157,7 @@ export const PrivacyPolicyPage = () => (
           <SectionTitle
             eyebrow="Third-party services"
             title="Services we rely on"
-            description="We use trusted third-party services to run CodeMarket."
+            description="We use trusted third-party services to run Neokit."
           />
           <div className="mt-6 rounded-2xl border border-gray-100 bg-white p-6 text-sm text-gray-600">
             <ul className="list-disc space-y-2 pl-5">
@@ -196,7 +196,7 @@ export const PrivacyPolicyPage = () => (
           <SectionTitle
             eyebrow="Children’s privacy"
             title="Our services are for adults and businesses"
-            description="CodeMarket is not intended for children under 13. We do not knowingly collect personal information from children."
+            description="Neokit is not intended for children under 13. We do not knowingly collect personal information from children."
           />
         </section>
 
@@ -212,11 +212,11 @@ export const PrivacyPolicyPage = () => (
           <SectionTitle
             eyebrow="Contact"
             title="Questions about privacy?"
-            description="Contact us at support@codemarket.com for privacy questions, data requests, or account deletion."
+            description="Contact us at support@neokit.com for privacy questions, data requests, or account deletion."
           />
           <div className="mt-4 text-sm">
-            <a className="font-medium text-blue-600 hover:underline" href="mailto:support@codemarket.com">
-              support@codemarket.com
+            <a className="font-medium text-blue-600 hover:underline" href="mailto:support@neokit.com">
+              support@neokit.com
             </a>
           </div>
         </section>

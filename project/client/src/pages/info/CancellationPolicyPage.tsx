@@ -9,10 +9,10 @@ import { Seo } from '@/components/info/Seo';
 export const CancellationPolicyPage = () => (
   <div className="min-h-screen bg-white">
     <Seo
-      title="Cancellation Policy | CodeMarket"
-      description="Read CodeMarket’s Cancellation Policy. Orders can be cancelled only before payment completion. After payment success and download access, cancellations are not possible."
+      title="Cancellation Policy | Neokit"
+      description="Read Neokit’s Cancellation Policy. Orders can be cancelled only before payment completion. After payment success and download access, cancellations are not possible."
       canonicalPath="/cancellation-policy"
-      ogTitle="CodeMarket Cancellation Policy"
+      ogTitle="Neokit Cancellation Policy"
       ogDescription="Cancellation rules for digital purchases and download access."
     />
     <MarketplaceNavbar showSearch={false} />
@@ -25,7 +25,7 @@ export const CancellationPolicyPage = () => (
           Simple cancellation rules for <span className="text-blue-600">digital</span> purchases.
         </>
       }
-      description="Because CodeMarket products are instant digital downloads, cancellations are only possible before payment completion."
+      description="Because Neokit products are instant digital downloads, cancellations are only possible before payment completion."
       primaryCta={{ label: 'Contact Support', to: '/contact' }}
       secondaryCta={{ label: 'Refund Policy', to: '/refund-policy' }}
     />
@@ -44,7 +44,7 @@ export const CancellationPolicyPage = () => (
               is granted. You can try again later from the template page.
             </PolicyCard>
             <PolicyCard title="Do not share payment links" icon={<ShieldCheck className="h-5 w-5" />}>
-              Use checkout only on CodeMarket. Do not attempt to complete payments using unknown or
+              Use checkout only on Neokit. Do not attempt to complete payments using unknown or
               shared links.
             </PolicyCard>
           </div>
@@ -79,8 +79,8 @@ export const CancellationPolicyPage = () => (
             </p>
             <p className="mt-4">
               Email:{' '}
-              <a className="font-medium text-blue-600 hover:underline" href="mailto:support@codemarket.com">
-                support@codemarket.com
+              <a className="font-medium text-blue-600 hover:underline" href="mailto:support@neokit.com">
+                support@neokit.com
               </a>
             </p>
           </div>

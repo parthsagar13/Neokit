@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
+import { BRAND_NAME, SUPPORT_EMAIL } from '@/lib/brand';
 
 const schema = z.object({
   name: z.string().min(2, 'Please enter your full name'),
@@ -32,10 +33,10 @@ export const ContactForm = () => {
     try {
       setLoading(true);
 
-      const to = 'support@codemarket.com';
-      const subject = encodeURIComponent(`[CodeMarket] ${data.subject}`);
+      const to = SUPPORT_EMAIL;
+      const subject = encodeURIComponent(`[${BRAND_NAME}] ${data.subject}`);
       const body = encodeURIComponent(
-        `Name: ${data.name}\nEmail: ${data.email}\n\n${data.message}\n\n— Sent from CodeMarket Contact Page`
+        `Name: ${data.name}\nEmail: ${data.email}\n\n${data.message}\n\n— Sent from ${BRAND_NAME} Contact Page`
       );
 
       window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;

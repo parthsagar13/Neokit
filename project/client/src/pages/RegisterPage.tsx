@@ -1,17 +1,22 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import toast from 'react-hot-toast';
-import { Code2, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
+import { NeokitIcon } from '@/components/brand/NeokitIcon';
+import { AuthDivider } from '@/components/auth/AuthDivider';
+import { GoogleSignInButton } from '@/components/auth/GoogleSignInButton';
 import { authApi } from '@/services/api';
 import { useUserAuth } from '@/context/UserAuthContext';
+import { useGoogleAuth } from '@/hooks/useGoogleAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { MarketplaceFooter } from '@/components/marketplace/MarketplaceFooter';
+import { isGoogleAuthEnabled } from '@/lib/googleAuth';
 
 const schema = z
   .object({
@@ -29,8 +34,13 @@ type FormData = z.infer<typeof schema>;
 
 export const RegisterPage = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { login } = useUserAuth();
+  const { handleGoogleSuccess } = useGoogleAuth();
   const [loading, setLoading] = useState(false);
+
+  const redirectTo = searchParams.get('redirect') || '/dashboard';
+  const loginHref = redirectTo === '/dashboard' ? '/login' : `/login?redirect=${encodeURIComponent(redirectTo)}`;
 
   const {
     register,
@@ -45,7 +55,7 @@ export const RegisterPage = () => {
       if (!response.user) throw new Error('Registration failed');
       login(response.token, response.user);
       toast.success('Account created!');
-      navigate('/dashboard');
+      navigate(redirectTo);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Registration failed');
     } finally {
@@ -59,10 +69,10 @@ export const RegisterPage = () => {
         <Card className="w-full max-w-md border-gray-100 shadow-lg">
           <CardHeader className="text-center">
             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100">
-              <Code2 className="h-6 w-6 text-blue-600" />
+              <NeokitIcon className="h-8 w-8" />
             </div>
             <CardTitle className="text-2xl">Create Account</CardTitle>
-            <p className="text-sm text-gray-500">Join Code Market AI</p>
+            <p className="text-sm text-gray-500">Join Neokit</p>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -90,9 +100,17 @@ export const RegisterPage = () => {
                 {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Create Account'}
               </Button>
             </form>
+
+            {isGoogleAuthEnabled && (
+              <>
+                <AuthDivider />
+                <GoogleSignInButton onSuccess={handleGoogleSuccess} disabled={loading} />
+              </>
+            )}
+
             <p className="mt-6 text-center text-sm text-gray-500">
               Already have an account?{' '}
-              <Link to="/login" className="font-medium text-blue-600 hover:underline">
+              <Link to={loginHref} className="font-medium text-blue-600 hover:underline">
                 Sign in
               </Link>
             </p>

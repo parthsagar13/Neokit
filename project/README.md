@@ -42,12 +42,17 @@ RAZORPAY_WEBHOOK_SECRET=your_webhook_secret
 
 API_PUBLIC_URL=http://localhost:5000
 CLIENT_URL=http://localhost:5173
+
+GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+GOOGLE_CALLBACK_URL=postmessage
 ```
 
 ### Client (`project/client/.env`)
 
 ```env
 VITE_API_URL=http://localhost:5000/api
+VITE_GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.com
 ```
 
 ## Setup
@@ -128,7 +133,7 @@ Backend verifies purchase → generates a **10-minute signed URL** → frontend 
 | POST | /api/auth/logout | No | Logout (client clears token) |
 | POST | /api/auth/forgot-password | No | Request password reset |
 | POST | /api/auth/reset-password | No | Reset password with token |
-| POST | /api/auth/google | No | Google OAuth placeholder |
+| POST | /api/auth/google | No | Google Sign-In (verify token, issue JWT) |
 | GET | /api/auth/me | User | Current user profile |
 
 ### Payment
@@ -195,6 +200,85 @@ Integrate SendGrid, Resend, or AWS SES when ready.
 6. Check **My Downloads** at `/dashboard/downloads`
 7. Check **My Purchases** at `/dashboard/purchases`
 8. Admin panel at `/admin/login` — view Orders, Payments, Customers
+9. **Google Sign-In:** click **Continue with Google** on `/login` or `/register` (requires Google OAuth env vars)
+
+## Google Authentication Setup
+
+### 1. Google Cloud Console
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a project (or select an existing one)
+3. Open **APIs & Services → OAuth consent screen**
+4. Choose **External**, fill app name (**Neokit**), support email, and developer contact
+5. Add scopes: `openid`, `email`, `profile`
+6. Add test users while in **Testing** mode (or publish the app for production)
+
+### 2. OAuth Credentials
+
+1. Go to **APIs & Services → Credentials**
+2. Click **Create Credentials → OAuth client ID**
+3. Application type: **Web application**
+4. Name: `Neokit Web Client`
+5. **Authorized JavaScript origins:**
+   - `http://localhost:5173` (local dev)
+   - `https://your-production-domain.com` (production)
+6. **Authorized redirect URIs:**
+   - `http://localhost:5173` (local dev)
+   - `https://your-production-domain.com` (production)
+7. Copy the **Client ID** and **Client Secret**
+
+### 3. Redirect URI configuration
+
+This project uses the **popup authorization-code flow** (`@react-oauth/google`).
+
+- Set `GOOGLE_CALLBACK_URL=postmessage` on the server (default for SPA popup)
+- The same **Client ID** must be set on both frontend and backend
+
+### 4. Required environment variables
+
+**Server (`project/server/.env`):**
+
+| Variable | Description |
+|----------|-------------|
+| `GOOGLE_CLIENT_ID` | OAuth Web client ID |
+| `GOOGLE_CLIENT_SECRET` | OAuth client secret (server only — never expose to frontend) |
+| `GOOGLE_CALLBACK_URL` | `postmessage` for popup flow, or your redirect URL |
+
+**Client (`project/client/.env`):**
+
+| Variable | Description |
+|----------|-------------|
+| `VITE_GOOGLE_CLIENT_ID` | Same OAuth Web client ID |
+
+### 5. Local development
+
+```bash
+# Server .env
+GOOGLE_CLIENT_ID=123456789-abc.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=GOCSPX-your-secret
+GOOGLE_CALLBACK_URL=postmessage
+
+# Client .env
+VITE_GOOGLE_CLIENT_ID=123456789-abc.apps.googleusercontent.com
+```
+
+Restart both `npm run dev` processes after changing env files.
+
+### 6. Production deployment
+
+1. Add production domain to **Authorized JavaScript origins** and **redirect URIs** in Google Cloud Console
+2. Set the same `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` on your backend host
+3. Set `VITE_GOOGLE_CLIENT_ID` on your frontend host (Netlify, Vercel, etc.)
+4. Rebuild the frontend after setting `VITE_GOOGLE_CLIENT_ID` (Vite embeds env at build time)
+5. Use HTTPS in production
+
+### Google login behavior
+
+- **New user:** account created with `provider: google`, avatar from Google profile
+- **Existing Google user:** logs in, updates `lastLogin`
+- **Existing email user + same Google email:** links `googleId` to existing account (no duplicate)
+- **JWT:** same token format as email/password login — all protected routes work unchanged
+- **Logout:** same client-side JWT clear for all users
 
 ## Production Setup
 

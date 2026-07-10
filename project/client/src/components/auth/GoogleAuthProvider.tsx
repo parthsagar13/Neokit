@@ -1,0 +1,11 @@
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import type { ReactNode } from 'react';
+import { GOOGLE_CLIENT_ID } from '@/lib/googleAuth';
+
+export const GoogleAuthProvider = ({ children }: { children: ReactNode }) => {
+  if (!GOOGLE_CLIENT_ID) {
+    return <>{children}</>;
+  }
+
+  return <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>{children}</GoogleOAuthProvider>;
+};

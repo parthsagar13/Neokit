@@ -50,7 +50,7 @@ const faqs = [
   },
   {
     q: 'How do I request a refund?',
-    a: 'Email support@codemarket.com with your invoice number, payment reference, account email, and the reason for the request. Include screenshots when relevant.',
+    a: 'Email support@neokit.com with your invoice number, payment reference, account email, and the reason for the request. Include screenshots when relevant.',
   },
   {
     q: 'How long do refunds take?',
@@ -61,10 +61,10 @@ const faqs = [
 export const RefundPolicyPage = () => (
   <div className="min-h-screen bg-white">
     <Seo
-      title="Refund Policy | CodeMarket"
-      description="Read CodeMarket’s digital product Refund Policy. Refunds are considered for duplicate payments, technical errors, corrupted ZIP files, download access issues, or non-delivery after payment success."
+      title="Refund Policy | Neokit"
+      description="Read Neokit’s digital product Refund Policy. Refunds are considered for duplicate payments, technical errors, corrupted ZIP files, download access issues, or non-delivery after payment success."
       canonicalPath="/refund-policy"
-      ogTitle="CodeMarket Refund Policy"
+      ogTitle="Neokit Refund Policy"
       ogDescription="Digital downloads with limited refund eligibility—see accepted cases and timeline."
     />
     <MarketplaceNavbar showSearch={false} />
@@ -77,7 +77,7 @@ export const RefundPolicyPage = () => (
           Digital products with <span className="text-blue-600">clear</span> refund rules.
         </>
       }
-      description="All products on CodeMarket are digital downloads. Refunds are considered only for specific, verifiable issues listed below."
+      description="All products on Neokit are digital downloads. Refunds are considered only for specific, verifiable issues listed below."
       primaryCta={{ label: 'Contact Support', to: '/contact' }}
       secondaryCta={{ label: 'Browse Templates', to: '/templates' }}
     />
@@ -130,8 +130,8 @@ export const RefundPolicyPage = () => (
             </ul>
             <p className="mt-4">
               Send details to{' '}
-              <a className="font-medium text-blue-600 hover:underline" href="mailto:support@codemarket.com">
-                support@codemarket.com
+              <a className="font-medium text-blue-600 hover:underline" href="mailto:support@neokit.com">
+                support@neokit.com
               </a>
               .
             </p>

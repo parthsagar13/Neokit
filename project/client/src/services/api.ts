@@ -49,6 +49,8 @@ export const authApi = {
   resetPassword: (token: string, password: string) =>
     api.post('/auth/reset-password', { token, password }).then((r) => r.data),
   getMe: () => api.get('/auth/me').then((r) => r.data),
+  googleLogin: (payload: { code?: string; credential?: string }) =>
+    api.post<LoginResponse>('/auth/google', payload).then((r) => r.data),
 };
 
 export const templateApi = {

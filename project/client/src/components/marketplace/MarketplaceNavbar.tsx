@@ -1,5 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Search, ShoppingCart, User, Code2 } from 'lucide-react';
+import { Search, ShoppingCart, User } from 'lucide-react';
+import { NeokitLogo } from '@/components/brand/NeokitLogo';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/context/AuthContext';
 import { useUserAuth } from '@/context/UserAuthContext';
@@ -40,9 +41,8 @@ export const MarketplaceNavbar = ({
   return (
     <header className="sticky top-0 z-50 border-b border-gray-100 bg-white/95 backdrop-blur-md">
       <div className={cn(marketplaceContainer, 'flex h-16 items-center gap-6')}>
-        <Link to="/" className="flex shrink-0 items-center gap-2">
-          <Code2 className="h-7 w-7 text-blue-600" />
-          <span className="text-lg font-bold tracking-tight">Code Market AI</span>
+        <Link to="/" className="flex shrink-0 items-center">
+          <NeokitLogo size="lg" useWordmarkImage />
         </Link>
 
         <nav className="hidden items-center gap-6 md:flex">

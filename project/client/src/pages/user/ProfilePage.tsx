@@ -23,14 +23,27 @@ export const ProfilePage = () => {
   return (
     <UserDashboardLayout title="Profile" active="/dashboard/profile">
       <div className="max-w-lg rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+        <div className="mb-6 flex items-center gap-4">
+          {user?.avatar ? (
+            <img
+              src={user.avatar}
+              alt={user.name}
+              className="h-16 w-16 rounded-full border border-gray-100 object-cover"
+            />
+          ) : (
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 text-xl font-bold text-blue-700">
+              {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+            </div>
+          )}
+          <div>
+            <p className="text-lg font-semibold text-gray-900">{user?.name}</p>
+            <p className="text-sm text-gray-500">{user?.email}</p>
+          </div>
+        </div>
         <div className="space-y-4">
           <div>
-            <p className="text-xs font-semibold uppercase text-gray-400">Name</p>
-            <p className="mt-1 font-medium text-gray-900">{user?.name}</p>
-          </div>
-          <div>
-            <p className="text-xs font-semibold uppercase text-gray-400">Email</p>
-            <p className="mt-1 font-medium text-gray-900">{user?.email}</p>
+            <p className="text-xs font-semibold uppercase text-gray-400">Sign-in method</p>
+            <p className="mt-1 font-medium capitalize text-gray-900">{user?.provider || 'email'}</p>
           </div>
           <div>
             <p className="text-xs font-semibold uppercase text-gray-400">Role</p>

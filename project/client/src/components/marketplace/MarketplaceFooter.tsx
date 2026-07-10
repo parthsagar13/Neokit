@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
-import { Code2, Globe } from 'lucide-react';
+import { Globe } from 'lucide-react';
+import { NeokitLogo } from '@/components/brand/NeokitLogo';
+import { BRAND_NAME } from '@/lib/brand';
 import { marketplaceContainer } from '@/lib/layout';
 import { cn } from '@/lib/utils';
 
@@ -28,9 +30,8 @@ export const MarketplaceFooter = () => (
     <div className={cn(marketplaceContainer, 'py-14')}>
       <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <div className="mb-4 flex items-center gap-2">
-            <Code2 className="h-6 w-6 text-blue-600" />
-            <span className="font-bold">Code Market AI</span>
+          <div className="mb-4">
+            <NeokitLogo size="lg" useWordmarkImage />
           </div>
           <p className="text-sm leading-relaxed text-gray-500">
             The premium marketplace for high-quality developer templates, boilerplates, and UI
@@ -60,7 +61,7 @@ export const MarketplaceFooter = () => (
       </div>
 
       <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-gray-200 pt-8 text-sm text-gray-500 sm:flex-row">
-        <p>&copy; {new Date().getFullYear()} Code Market AI. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} {BRAND_NAME}. All rights reserved.</p>
         <p>Global | USD</p>
       </div>
     </div>

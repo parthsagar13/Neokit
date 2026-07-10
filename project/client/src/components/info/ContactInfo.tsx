@@ -1,4 +1,5 @@
 import { Mail, MapPin, Clock, MessageSquareText } from 'lucide-react';
+import { SALES_EMAIL, SUPPORT_EMAIL } from '@/lib/brand';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export const ContactInfo = () => (
@@ -15,12 +16,12 @@ export const ContactInfo = () => (
           <Mail className="mt-0.5 h-4 w-4 text-gray-400" />
           <div>
             <p className="font-medium text-gray-900">Support</p>
-            <a className="text-blue-600 hover:underline" href="mailto:support@codemarket.com">
-              support@codemarket.com
+            <a className="text-blue-600 hover:underline" href={`mailto:${SUPPORT_EMAIL}`}>
+              {SUPPORT_EMAIL}
             </a>
             <p className="mt-2 font-medium text-gray-900">Sales</p>
-            <a className="text-blue-600 hover:underline" href="mailto:sales@codemarket.com">
-              sales@codemarket.com
+            <a className="text-blue-600 hover:underline" href={`mailto:${SALES_EMAIL}`}>
+              {SALES_EMAIL}
             </a>
           </div>
         </div>

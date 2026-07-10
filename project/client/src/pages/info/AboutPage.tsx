@@ -25,7 +25,7 @@ const story = [
   {
     title: 'A marketplace built for builders',
     description:
-      'CodeMarket curates templates that ship like real products: organized code, predictable structure, modern components, and clear customization paths.',
+      'Neokit curates templates that ship like real products: organized code, predictable structure, modern components, and clear customization paths.',
   },
   {
     title: 'Quality you can verify before you buy',
@@ -90,16 +90,16 @@ const tech = [
 export const AboutPage = () => (
   <div className="min-h-screen bg-white">
     <Seo
-      title="About CodeMarket | Premium Website Template Marketplace"
-      description="Learn about CodeMarket—our mission, vision, and the quality standards behind our premium templates for HTML, React, Next.js, Vue, dashboards, UI kits, and SaaS starters."
+      title="About Neokit | Premium Website Template Marketplace"
+      description="Learn about Neokit—our mission, vision, and the quality standards behind our premium templates for HTML, React, Next.js, Vue, dashboards, UI kits, and SaaS starters."
       canonicalPath="/about"
-      ogTitle="About CodeMarket"
+      ogTitle="About Neokit"
       ogDescription="Premium templates designed for production: modern UI, clean code, regular updates, and commercial license support."
     />
     <MarketplaceNavbar showSearch={false} />
 
     <HeroSection
-      eyebrow="About CodeMarket"
+      eyebrow="About Neokit"
       icon={<Gauge className="h-3.5 w-3.5" />}
       title={
         <>
@@ -107,7 +107,7 @@ export const AboutPage = () => (
           <span className="text-blue-600">ship faster</span>.
         </>
       }
-      description="CodeMarket is a premium marketplace for developers and teams who want production-ready templates—designed with modern UI, clean code, and performance in mind."
+      description="Neokit is a premium marketplace for developers and teams who want production-ready templates—designed with modern UI, clean code, and performance in mind."
       primaryCta={{ label: 'Browse Premium Templates', to: '/templates' }}
       secondaryCta={{ label: 'Contact Support', to: '/contact' }}
     />
@@ -137,7 +137,7 @@ export const AboutPage = () => (
             <SectionTitle
               eyebrow="Our story"
               title="From repeated setup work to reusable foundations"
-              description="We created CodeMarket after years of rebuilding the same foundations—auth, dashboards, landing pages, and UI libraries—across different client and internal projects."
+              description="We created Neokit after years of rebuilding the same foundations—auth, dashboards, landing pages, and UI libraries—across different client and internal projects."
             />
             <div className="mt-6 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
               <Timeline items={story} />
@@ -147,7 +147,7 @@ export const AboutPage = () => (
 
         <div className="space-y-10">
           <div>
-            <SectionTitle eyebrow="Why choose CodeMarket" title="Premium templates, thoughtfully built" />
+            <SectionTitle eyebrow="Why choose Neokit" title="Premium templates, thoughtfully built" />
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
               {why.map((item) => (
                 <PolicyCard key={item.title} title={item.title} icon={item.icon}>

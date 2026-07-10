@@ -9,10 +9,10 @@ import { Seo } from '@/components/info/Seo';
 export const TermsPage = () => (
   <div className="min-h-screen bg-white">
     <Seo
-      title="Terms & Conditions | CodeMarket"
-      description="Review CodeMarket’s Terms & Conditions including digital product sales, licensing, downloads, payments, refunds, support, restrictions, and legal disclaimers."
+      title="Terms & Conditions | Neokit"
+      description="Review Neokit’s Terms & Conditions including digital product sales, licensing, downloads, payments, refunds, support, restrictions, and legal disclaimers."
       canonicalPath="/terms"
-      ogTitle="CodeMarket Terms & Conditions"
+      ogTitle="Neokit Terms & Conditions"
       ogDescription="Digital product terms, licensing, downloads, and legal policies."
     />
     <MarketplaceNavbar showSearch={false} />
@@ -25,7 +25,7 @@ export const TermsPage = () => (
           Clear terms for a <span className="text-blue-600">premium</span> marketplace.
         </>
       }
-      description="These Terms govern your access to CodeMarket and your purchase and use of digital templates. By using the website, you agree to these Terms."
+      description="These Terms govern your access to Neokit and your purchase and use of digital templates. By using the website, you agree to these Terms."
       primaryCta={{ label: 'Browse Templates', to: '/templates' }}
       secondaryCta={{ label: 'Privacy Policy', to: '/privacy-policy' }}
     />
@@ -34,17 +34,17 @@ export const TermsPage = () => (
       <div className="rounded-3xl border border-gray-100 bg-white p-8 shadow-sm">
         <p className="text-sm text-gray-500">
           Effective date: {new Date().toLocaleDateString()} · For questions, contact{' '}
-          <a className="text-blue-600 hover:underline" href="mailto:support@codemarket.com">
-            support@codemarket.com
+          <a className="text-blue-600 hover:underline" href="mailto:support@neokit.com">
+            support@neokit.com
           </a>
           .
         </p>
 
         <section className="mt-10 space-y-8">
           <div>
-            <SectionTitle eyebrow="1. Acceptance of terms" title="By using CodeMarket, you agree" />
+            <SectionTitle eyebrow="1. Acceptance of terms" title="By using Neokit, you agree" />
             <p className="mt-4 text-sm leading-relaxed text-gray-600">
-              By accessing or using CodeMarket, creating an account, or purchasing any product, you
+              By accessing or using Neokit, creating an account, or purchasing any product, you
               agree to be bound by these Terms. If you do not agree, do not use the website.
             </p>
           </div>
@@ -53,7 +53,7 @@ export const TermsPage = () => (
             <SectionTitle
               eyebrow="2. Digital product sales"
               title="All products are digital downloads"
-              description="CodeMarket sells digital templates and starter kits delivered electronically."
+              description="Neokit sells digital templates and starter kits delivered electronically."
             />
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
               <PolicyCard title="Instant access" icon={<Download className="h-5 w-5" />}>
@@ -61,7 +61,7 @@ export const TermsPage = () => (
                 purchased items from “My Downloads”.
               </PolicyCard>
               <PolicyCard title="No physical delivery" icon={<FileLock2 className="h-5 w-5" />}>
-                CodeMarket does not ship physical goods. Delivery is performed via secure signed
+                Neokit does not ship physical goods. Delivery is performed via secure signed
                 download links.
               </PolicyCard>
             </div>
@@ -100,7 +100,7 @@ export const TermsPage = () => (
               description="All templates, preview assets, and brand content are protected by applicable laws."
             />
             <p className="mt-4 text-sm leading-relaxed text-gray-600">
-              CodeMarket and its sellers retain all rights, title, and interest in and to the
+              Neokit and its sellers retain all rights, title, and interest in and to the
               templates, including all associated intellectual property. Your purchase grants a
               limited, non-exclusive, non-transferable license under the applicable license terms.
             </p>
@@ -169,7 +169,7 @@ export const TermsPage = () => (
               </PolicyCard>
               <PolicyCard title="No abuse or exploitation" icon={<AlertTriangle className="h-5 w-5" />}>
                 You may not attempt to bypass security controls, scrape private resources, or misuse
-                the marketplace in ways that harm CodeMarket or other customers.
+                the marketplace in ways that harm Neokit or other customers.
               </PolicyCard>
             </div>
           </div>
@@ -186,7 +186,7 @@ export const TermsPage = () => (
           <div>
             <SectionTitle eyebrow="12. Disclaimer" title="No warranty" />
             <p className="mt-4 text-sm leading-relaxed text-gray-600">
-              CodeMarket is provided “as is” and “as available”. To the maximum extent permitted by
+              Neokit is provided “as is” and “as available”. To the maximum extent permitted by
               law, we disclaim all warranties, express or implied, including merchantability,
               fitness for a particular purpose, and non-infringement.
             </p>
@@ -195,7 +195,7 @@ export const TermsPage = () => (
           <div>
             <SectionTitle eyebrow="13. Limitation of liability" title="Limited liability" />
             <p className="mt-4 text-sm leading-relaxed text-gray-600">
-              To the maximum extent permitted by law, CodeMarket shall not be liable for indirect,
+              To the maximum extent permitted by law, Neokit shall not be liable for indirect,
               incidental, special, consequential, or punitive damages, or any loss of profits or
               data, arising from or related to your use of the website or templates.
             </p>
@@ -205,8 +205,8 @@ export const TermsPage = () => (
             <p className="font-semibold text-gray-900">Contact</p>
             <p className="mt-1">
               For questions about these Terms, email{' '}
-              <a className="text-blue-600 hover:underline" href="mailto:support@codemarket.com">
-                support@codemarket.com
+              <a className="text-blue-600 hover:underline" href="mailto:support@neokit.com">
+                support@neokit.com
               </a>
               .
             </p>

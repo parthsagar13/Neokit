@@ -1,5 +1,6 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, FileStack, LogOut, Code2, ShoppingBag, CreditCard, Download, Users } from 'lucide-react';
+import { LayoutDashboard, FileStack, LogOut, ShoppingBag, CreditCard, Download, Users } from 'lucide-react';
+import { NeokitLogo } from '@/components/brand/NeokitLogo';
 import { useAuth } from '@/context/AuthContext';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -25,9 +26,8 @@ export const AdminSidebar = () => {
 
   return (
     <aside className="flex h-screen w-64 flex-col border-r border-gray-200 bg-white">
-      <div className="flex items-center gap-2 border-b border-gray-200 px-6 py-5">
-        <Code2 className="h-6 w-6 text-blue-600" />
-        <span className="text-lg font-bold">Code Market AI</span>
+      <div className="border-b border-gray-200 px-6 py-5">
+        <NeokitLogo size="md" useWordmarkImage />
       </div>
 
       <nav className="flex-1 space-y-1 p-4">
