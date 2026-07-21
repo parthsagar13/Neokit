@@ -36,7 +36,13 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     const message = error.response?.data?.message || error.message || 'Something went wrong';
-    return Promise.reject(new Error(message));
+    const enriched = new Error(message) as Error & {
+      status?: number;
+      data?: unknown;
+    };
+    enriched.status = error.response?.status;
+    enriched.data = error.response?.data;
+    return Promise.reject(enriched);
   }
 );
 
@@ -72,6 +78,8 @@ export const templateApi = {
 export const paymentApi = {
   createOrder: (templateId: string) =>
     api.post<RazorpayOrderResponse>('/payment/create-order', { templateId }).then((r) => r.data),
+  createNeoKitOrder: () =>
+    api.post<RazorpayOrderResponse>('/payment/create-neokit-order').then((r) => r.data),
   verify: (data: {
     razorpayOrderId: string;
     razorpayPaymentId: string;

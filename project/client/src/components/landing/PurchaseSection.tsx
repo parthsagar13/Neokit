@@ -1,9 +1,10 @@
 'use client';
 
-import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowRight, Check, Play, Sparkles } from 'lucide-react';
+import { ArrowRight, Check, Play, Sparkles, Loader2 } from 'lucide-react';
 import { SectionHeading } from './SectionHeading';
+import { LIVE_PREVIEW_URL } from '@/lib/brand';
+import { useNeoKitPurchase } from '@/hooks/useNeoKitPurchase';
 
 const includes = [
   'Lifetime Access',
@@ -24,6 +25,8 @@ const includes = [
 ];
 
 export function PurchaseSection() {
+  const { buy, processing } = useNeoKitPurchase();
+
   return (
     <section id="purchase" className="nk-section relative overflow-hidden bg-primary-bg">
       <div className="nk-noise" />
@@ -80,15 +83,28 @@ export function PurchaseSection() {
             </div>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link
-                href="/templates"
-                className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-primary px-6 text-sm font-semibold text-white shadow-[0_12px_30px_-10px_rgba(20,184,166,0.75)] transition hover:-translate-y-0.5 hover:bg-primary-hover"
+              <button
+                type="button"
+                onClick={() => void buy()}
+                disabled={processing}
+                className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-primary px-6 text-sm font-semibold text-white shadow-[0_12px_30px_-10px_rgba(20,184,166,0.75)] transition hover:-translate-y-0.5 hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-70"
               >
-                Buy Now
-                <ArrowRight className="h-4 w-4" />
-              </Link>
+                {processing ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    Buy Now
+                    <ArrowRight className="h-4 w-4" />
+                  </>
+                )}
+              </button>
               <a
-                href="#showcase"
+                href={LIVE_PREVIEW_URL}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-background px-6 text-sm font-semibold text-text transition hover:-translate-y-0.5 hover:border-primary/30"
               >
                 <Play className="h-4 w-4 fill-current text-primary" />

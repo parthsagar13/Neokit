@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { NeokitLogo } from '@/components/brand/NeokitLogo';
+import { NeokitTextLogo } from '@/components/brand/NeokitTextLogo';
 import { SUPPORT_EMAIL } from '@/lib/brand';
 
 const cols = [
@@ -39,7 +39,7 @@ export function LandingFooter() {
     <footer className="border-t border-slate-800 bg-sidebar text-slate-300">
       <div className="nk-container grid gap-10 py-16 sm:grid-cols-2 lg:grid-cols-5">
         <div className="lg:col-span-2">
-          <NeokitLogo size="lg" useWordmarkImage className="brightness-0 invert" />
+          <NeokitTextLogo size="xl" variant="onDark" />
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-slate-400">
             Premium React Admin Dashboard Starter Kit for teams who want beautiful, production-ready
             interfaces without reinventing the foundation.

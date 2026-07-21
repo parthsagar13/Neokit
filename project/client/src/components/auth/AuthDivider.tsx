@@ -1,10 +1,10 @@
 export const AuthDivider = () => (
   <div className="relative my-6">
     <div className="absolute inset-0 flex items-center">
-      <span className="w-full border-t border-gray-200" />
+      <span className="w-full border-t border-border" />
     </div>
     <div className="relative flex justify-center text-xs uppercase">
-      <span className="bg-white px-3 font-medium tracking-wide text-gray-400">or</span>
+      <span className="bg-white px-3 font-medium tracking-wide text-slate-400">or</span>
     </div>
   </div>
 );

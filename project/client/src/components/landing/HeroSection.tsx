@@ -1,10 +1,11 @@
 'use client';
 
-import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Star, Check, ArrowRight, Play } from 'lucide-react';
+import { Star, Check, ArrowRight, Play, Loader2 } from 'lucide-react';
 import { HeroShowcase } from './HeroShowcase';
 import { AnimatedCounter } from './AnimatedCounter';
+import { LIVE_PREVIEW_URL } from '@/lib/brand';
+import { useNeoKitPurchase } from '@/hooks/useNeoKitPurchase';
 
 const trustItems = [
   'Lifetime Updates',
@@ -16,6 +17,8 @@ const trustItems = [
 ];
 
 export function HeroSection() {
+  const { buy, processing } = useNeoKitPurchase();
+
   return (
     <section className="relative overflow-x-clip border-b border-border bg-gradient-to-b from-primary-bg via-background to-background pt-8 pb-24 sm:pt-12 sm:pb-32">
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -69,20 +72,33 @@ export function HeroSection() {
             transition={{ delay: 0.3, duration: 0.6 }}
             className="mt-8 flex flex-wrap gap-3"
           >
-            <Link
-              href="#purchase"
-              className="inline-flex h-12 items-center gap-2 rounded-xl bg-primary px-7 text-sm font-semibold text-white shadow-[0_10px_30px_-8px_rgba(20,184,166,0.65)] transition hover:-translate-y-0.5 hover:bg-primary-hover"
+            <button
+              type="button"
+              onClick={() => void buy()}
+              disabled={processing}
+              className="inline-flex h-12 items-center gap-2 rounded-xl bg-primary px-7 text-sm font-semibold text-white shadow-[0_10px_30px_-8px_rgba(20,184,166,0.65)] transition hover:-translate-y-0.5 hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-70"
             >
-              Buy Now
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              href="#showcase"
+              {processing ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                <>
+                  Buy Now
+                  <ArrowRight className="h-4 w-4" />
+                </>
+              )}
+            </button>
+            <a
+              href={LIVE_PREVIEW_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex h-12 items-center gap-2 rounded-xl border border-border bg-white px-7 text-sm font-semibold text-text shadow-sm transition hover:-translate-y-0.5 hover:border-primary/30 hover:text-primary-active"
             >
               <Play className="h-4 w-4 fill-current text-primary" />
               Live Preview
-            </Link>
+            </a>
           </motion.div>
 
           <motion.ul
