@@ -92,6 +92,33 @@ export const downloadApi = {
   getSignedUrl: (templateId: string) =>
     api.get<DownloadResponse>(`/download/${templateId}`).then((r) => r.data),
   getMyDownloads: () => api.get<DownloadItem[]>('/downloads').then((r) => r.data),
+  downloadNeoKit: async () => {
+    try {
+      const response = await api.get('/download/neokit', { responseType: 'blob' });
+      const blob = new Blob([response.data], { type: 'application/zip' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'neokit.zip';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      const e = err as Error & { data?: unknown };
+      if (e.data instanceof Blob) {
+        const text = await e.data.text();
+        try {
+          const parsed = JSON.parse(text) as { message?: string };
+          throw new Error(parsed.message || 'Download failed');
+        } catch (inner) {
+          if (inner instanceof Error && inner.message !== 'Download failed') throw inner;
+          throw new Error(e.message || 'Download failed');
+        }
+      }
+      throw err;
+    }
+  },
 };
 
 export const orderApi = {

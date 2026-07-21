@@ -14,6 +14,16 @@ import {
   hasPurchaseAccess,
   generateInvoiceNumber,
 } from '../services/purchaseService.js';
+import {
+  NEOKIT_PRODUCT_KEY,
+  NEOKIT_PRODUCT_TITLE,
+  completeNeoKitFreeClaim,
+  completeNeoKitPurchase,
+  getNeoKitCurrency,
+  getNeoKitPrice,
+  hasNeoKitAccess,
+  neoKitZipExists,
+} from '../services/neokitProduct.js';
 
 export const createOrder = async (req, res, next) => {
   try {
@@ -33,22 +43,100 @@ export const createOrder = async (req, res, next) => {
   }
 };
 
-/** Resolve NeoKit starter kit product and create Razorpay order */
+/** NeoKit Buy Now — fixed product from server/product/neokit.zip (no template slug) */
 export const createNeoKitOrder = async (req, res, next) => {
   try {
-    const slug = process.env.NEOKIT_PRODUCT_SLUG || 'neokit-starter-kit';
-    let template =
-      (await Template.findOne({ slug })) ||
-      (await Template.findOne({ title: { $regex: /neokit/i } }));
-
-    if (!template) {
-      return res.status(404).json({
+    if (!neoKitZipExists()) {
+      return res.status(503).json({
         message:
-          'NeoKit product is not configured. Upload/create a template and set NEOKIT_PRODUCT_SLUG to its slug.',
+          'NeoKit ZIP is missing. Place neokit.zip in project/server/product/ on the server.',
       });
     }
 
-    return createOrderForTemplate(req, res, template);
+    const alreadyOwned = await hasNeoKitAccess(req.user._id);
+    if (alreadyOwned) {
+      return res.status(409).json({
+        message: 'You have already purchased NeoKit',
+        alreadyOwned: true,
+        productKey: NEOKIT_PRODUCT_KEY,
+      });
+    }
+
+    const price = getNeoKitPrice();
+    const currency = getNeoKitCurrency();
+
+    if (price === 0) {
+      const order = await completeNeoKitFreeClaim({ user: req.user });
+      return res.json({
+        free: true,
+        order: {
+          id: order._id,
+          invoiceNumber: order.invoiceNumber,
+          status: order.status,
+        },
+        productKey: NEOKIT_PRODUCT_KEY,
+        message: 'NeoKit unlocked successfully',
+      });
+    }
+
+    const existingPending = await Order.findOne({
+      user: req.user._id,
+      productKey: NEOKIT_PRODUCT_KEY,
+      status: 'pending',
+    });
+
+    if (existingPending?.razorpayOrderId) {
+      return res.json({
+        keyId: getRazorpayKeyId(),
+        orderId: existingPending.razorpayOrderId,
+        amount: existingPending.amount,
+        currency: existingPending.currency,
+        dbOrderId: existingPending._id,
+        productKey: NEOKIT_PRODUCT_KEY,
+        title: NEOKIT_PRODUCT_TITLE,
+      });
+    }
+
+    const receipt = generateReceipt(NEOKIT_PRODUCT_KEY);
+    const razorpayOrder = await createRazorpayOrder({
+      amount: price,
+      currency,
+      receipt,
+      notes: {
+        productKey: NEOKIT_PRODUCT_KEY,
+        userId: String(req.user._id),
+      },
+    });
+
+    const order = await Order.create({
+      user: req.user._id,
+      productKey: NEOKIT_PRODUCT_KEY,
+      amount: price,
+      currency: razorpayOrder.currency,
+      status: 'pending',
+      razorpayOrderId: razorpayOrder.id,
+      invoiceNumber: generateInvoiceNumber(),
+    });
+
+    await Payment.create({
+      user: req.user._id,
+      order: order._id,
+      productKey: NEOKIT_PRODUCT_KEY,
+      gateway: 'razorpay',
+      gatewayOrderId: razorpayOrder.id,
+      amount: price,
+      status: 'pending',
+    });
+
+    return res.json({
+      keyId: getRazorpayKeyId(),
+      orderId: razorpayOrder.id,
+      amount: price,
+      currency: razorpayOrder.currency,
+      dbOrderId: order._id,
+      productKey: NEOKIT_PRODUCT_KEY,
+      title: NEOKIT_PRODUCT_TITLE,
+    });
   } catch (err) {
     next(err);
   }
@@ -175,6 +263,41 @@ export const verifyPayment = async (req, res, next) => {
       return res.status(404).json({ message: 'Order not found' });
     }
 
+    if (order.productKey === NEOKIT_PRODUCT_KEY) {
+      if (order.status === 'paid') {
+        return res.json({
+          success: true,
+          message: 'Payment already verified',
+          order: {
+            id: order._id,
+            invoiceNumber: order.invoiceNumber,
+            status: order.status,
+          },
+          productKey: NEOKIT_PRODUCT_KEY,
+        });
+      }
+
+      const { order: updatedOrder } = await completeNeoKitPurchase({
+        user: req.user,
+        order,
+        razorpayPaymentId,
+        razorpaySignature,
+        paymentMethod: 'razorpay',
+        gatewayResponse: req.body,
+      });
+
+      return res.json({
+        success: true,
+        message: 'Payment verified successfully',
+        order: {
+          id: updatedOrder._id,
+          invoiceNumber: updatedOrder.invoiceNumber,
+          status: updatedOrder.status,
+        },
+        productKey: NEOKIT_PRODUCT_KEY,
+      });
+    }
+
     if (order.status === 'paid') {
       return res.json({
         success: true,
@@ -185,9 +308,13 @@ export const verifyPayment = async (req, res, next) => {
           status: order.status,
         },
         template: {
-          slug: order.template.slug,
+          slug: order.template?.slug,
         },
       });
+    }
+
+    if (!order.template) {
+      return res.status(400).json({ message: 'Order is missing template' });
     }
 
     const { order: updatedOrder } = await completePurchase({
@@ -238,15 +365,26 @@ export const handleWebhook = async (req, res, next) => {
       );
       if (order && order.status !== 'paid') {
         const user = { _id: order.user };
-        await completePurchase({
-          user,
-          template: order.template,
-          order,
-          razorpayPaymentId: paymentEntity.id,
-          razorpaySignature: signature,
-          paymentMethod: paymentEntity.method,
-          gatewayResponse: event,
-        });
+        if (order.productKey === NEOKIT_PRODUCT_KEY) {
+          await completeNeoKitPurchase({
+            user,
+            order,
+            razorpayPaymentId: paymentEntity.id,
+            razorpaySignature: signature,
+            paymentMethod: paymentEntity.method,
+            gatewayResponse: event,
+          });
+        } else if (order.template) {
+          await completePurchase({
+            user,
+            template: order.template,
+            order,
+            razorpayPaymentId: paymentEntity.id,
+            razorpaySignature: signature,
+            paymentMethod: paymentEntity.method,
+            gatewayResponse: event,
+          });
+        }
       }
     }
 

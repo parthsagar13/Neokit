@@ -6,13 +6,12 @@ import toast from 'react-hot-toast';
 import { paymentApi } from '@/services/api';
 import { useUserAuth } from '@/context/UserAuthContext';
 import { loadRazorpayScript } from '@/lib/razorpay';
-import { BRAND_NAME, NEOKIT_PRODUCT_SLUG } from '@/lib/brand';
+import { BRAND_NAME } from '@/lib/brand';
 
 type ApiError = Error & {
   status?: number;
   data?: {
     alreadyOwned?: boolean;
-    template?: { id?: string; title?: string; slug?: string };
   };
 };
 
@@ -22,12 +21,9 @@ export function useNeoKitPurchase() {
   const { user, isAuthenticated } = useUserAuth();
   const [processing, setProcessing] = useState(false);
 
-  const goToSuccess = useCallback(
-    (slug?: string) => {
-      router.push(`/success?slug=${encodeURIComponent(slug || NEOKIT_PRODUCT_SLUG)}`);
-    },
-    [router]
-  );
+  const goToSuccess = useCallback(() => {
+    router.push('/success');
+  }, [router]);
 
   const buy = useCallback(async () => {
     if (!isAuthenticated || !user) {
@@ -44,7 +40,7 @@ export function useNeoKitPurchase() {
 
       if (orderData.free) {
         toast.success('NeoKit unlocked!');
-        goToSuccess(orderData.template?.slug);
+        goToSuccess();
         return;
       }
 
@@ -59,7 +55,7 @@ export function useNeoKitPurchase() {
         amount: Math.round((orderData.amount || 0) * 100),
         currency: orderData.currency || 'INR',
         name: BRAND_NAME,
-        description: orderData.template?.title || 'NeoKit Starter Kit',
+        description: orderData.title || 'NeoKit Starter Kit',
         order_id: orderData.orderId,
         prefill: { name: user.name, email: user.email },
         theme: { color: '#14B8A6' },
@@ -89,18 +85,14 @@ export function useNeoKitPurchase() {
           razorpay_signature: string;
         }) => {
           try {
-            const result = await paymentApi.verify({
+            await paymentApi.verify({
               razorpayOrderId: response.razorpay_order_id,
               razorpayPaymentId: response.razorpay_payment_id,
               razorpaySignature: response.razorpay_signature,
               dbOrderId: orderData.dbOrderId!,
             });
             toast.success('Payment successful!');
-            const slug =
-              (result as { template?: { slug?: string } }).template?.slug ||
-              orderData.template?.slug ||
-              NEOKIT_PRODUCT_SLUG;
-            goToSuccess(slug);
+            goToSuccess();
           } catch (err) {
             toast.error(err instanceof Error ? err.message : 'Payment verification failed');
             router.push('/payment-failed');
@@ -124,7 +116,7 @@ export function useNeoKitPurchase() {
       const apiErr = err as ApiError;
       if (apiErr.status === 409 || apiErr.data?.alreadyOwned) {
         toast.success('You already own NeoKit');
-        goToSuccess(apiErr.data?.template?.slug || NEOKIT_PRODUCT_SLUG);
+        goToSuccess();
         setProcessing(false);
         return;
       }

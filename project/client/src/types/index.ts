@@ -107,6 +107,8 @@ export interface RazorpayOrderResponse {
   amount?: number;
   currency?: string;
   dbOrderId?: string;
+  productKey?: string;
+  title?: string;
   template?: { id: string; title: string; slug: string };
   order?: { id: string; invoiceNumber: string; status: string };
   message?: string;

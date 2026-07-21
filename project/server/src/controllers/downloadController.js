@@ -1,3 +1,4 @@
+import fs from 'fs';
 import { Download } from '../models/Download.js';
 import { Template } from '../models/Template.js';
 import { storageService } from '../services/storage/storage.service.js';
@@ -5,8 +6,46 @@ import {
   hasPurchaseAccess,
   getTemplateZipPath,
 } from '../services/purchaseService.js';
+import {
+  NEOKIT_ZIP_FILENAME,
+  getNeoKitZipPath,
+  hasNeoKitAccess,
+  neoKitZipExists,
+} from '../services/neokitProduct.js';
 
 const SIGNED_URL_EXPIRY = 600;
+
+/** Stream local NeoKit ZIP from server/product/neokit.zip after purchase */
+export const downloadNeoKit = async (req, res, next) => {
+  try {
+    const hasAccess = await hasNeoKitAccess(req.user._id);
+    if (!hasAccess) {
+      return res.status(403).json({ message: 'Unauthorized download — purchase required' });
+    }
+
+    if (!neoKitZipExists()) {
+      return res.status(404).json({
+        message: 'NeoKit ZIP not found. Place neokit.zip in project/server/product/.',
+      });
+    }
+
+    const zipPath = getNeoKitZipPath();
+    const stat = fs.statSync(zipPath);
+
+    res.setHeader('Content-Type', 'application/zip');
+    res.setHeader('Content-Length', stat.size);
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename="${NEOKIT_ZIP_FILENAME}"`
+    );
+
+    const stream = fs.createReadStream(zipPath);
+    stream.on('error', next);
+    stream.pipe(res);
+  } catch (err) {
+    next(err);
+  }
+};
 
 export const secureDownload = async (req, res, next) => {
   try {

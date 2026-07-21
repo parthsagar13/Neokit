@@ -1,0 +1,6 @@
+# Put your NeoKit ZIP here as: neokit.zip
+# Full path: project/server/product/neokit.zip
+*
+!.gitignore
+!.gitkeep
+!README.txt
