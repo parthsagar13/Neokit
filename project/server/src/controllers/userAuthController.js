@@ -1,4 +1,5 @@
-import jwt from 'jsonwebtoken';
+// TEMP: JWT auth disabled — re-enable when JWT_SECRET is set in production
+// import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { Admin } from '../models/Admin.js';
 import { User } from '../models/User.js';
@@ -13,11 +14,17 @@ import {
   verifyGoogleIdToken,
 } from '../services/googleAuthService.js';
 
-const signUserToken = (userId) =>
-  jwt.sign({ id: userId, role: 'user' }, process.env.JWT_SECRET, { expiresIn: '7d' });
+// TEMP: plain base64 token (not secure — replace with JWT later)
+const encodeTempToken = (payload) =>
+  Buffer.from(JSON.stringify(payload)).toString('base64url');
 
-const signAdminToken = (adminId) =>
-  jwt.sign({ id: adminId, role: 'admin' }, process.env.JWT_SECRET, { expiresIn: '7d' });
+const signUserToken = (userId) => encodeTempToken({ id: String(userId), role: 'user' });
+// const signUserToken = (userId) =>
+//   jwt.sign({ id: userId, role: 'user' }, process.env.JWT_SECRET, { expiresIn: '7d' });
+
+const signAdminToken = (adminId) => encodeTempToken({ id: String(adminId), role: 'admin' });
+// const signAdminToken = (adminId) =>
+//   jwt.sign({ id: adminId, role: 'admin' }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
 const formatUserResponse = (user) => ({
   id: user._id,
