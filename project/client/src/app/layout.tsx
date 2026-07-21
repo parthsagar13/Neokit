@@ -1,38 +1,37 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Plus_Jakarta_Sans } from 'next/font/google';
 import { Providers } from '@/components/Providers';
-import { BRAND_TITLE } from '@/lib/brand';
 import './globals.css';
 
-const inter = Inter({
+const jakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-jakarta',
   display: 'swap',
 });
 
 export const metadata: Metadata = {
   title: {
-    default: BRAND_TITLE,
-    template: `%s | Neokit`,
+    default: 'NeoKit — Premium React Admin Dashboard Starter Kit',
+    template: `%s | NeoKit`,
   },
   description:
-    'Neokit — Premium Developer Assets Marketplace. HTML, React, Next.js, Vue templates, UI kits, and SaaS starters.',
+    'NeoKit is a premium React + TypeScript admin dashboard starter kit with 150+ components, apps, theme customizer, dark mode, and RTL — built for production teams.',
   icons: {
     icon: '/brand/neokit-icon.png',
     apple: '/brand/neokit-icon.png',
   },
   openGraph: {
     type: 'website',
-    title: BRAND_TITLE,
+    title: 'NeoKit — Premium React Admin Dashboard Starter Kit',
     description:
-      'Browse premium website templates, admin dashboards, landing pages, and starter kits built for production.',
+      'Build beautiful admin dashboards faster with NeoKit. Lifetime access, full source code, and production-ready UI.',
   },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} font-sans antialiased`}>
+      <body className={`${jakarta.variable} font-sans antialiased`}>
         <Providers>{children}</Providers>
       </body>
     </html>

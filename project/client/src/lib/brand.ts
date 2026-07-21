@@ -1,6 +1,6 @@
-export const BRAND_NAME = 'Neokit';
-export const BRAND_TAGLINE = 'Premium Developer Assets Marketplace';
-export const BRAND_TITLE = `${BRAND_NAME} - ${BRAND_TAGLINE}`;
+export const BRAND_NAME = 'NeoKit';
+export const BRAND_TAGLINE = 'Premium React Admin Dashboard Starter Kit';
+export const BRAND_TITLE = `${BRAND_NAME} — ${BRAND_TAGLINE}`;
 export const SUPPORT_EMAIL = 'support@neokit.com';
 export const SALES_EMAIL = 'sales@neokit.com';
 

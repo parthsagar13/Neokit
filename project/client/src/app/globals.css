@@ -1,4 +1,8 @@
 @import "tailwindcss";
+@import "swiper/css";
+@import "swiper/css/effect-coverflow";
+@import "swiper/css/pagination";
+@import "swiper/css/navigation";
 
 @source "../views/**/*.{js,ts,jsx,tsx}";
 @source "../components/**/*.{js,ts,jsx,tsx}";
@@ -6,21 +10,168 @@
 @source "../lib/**/*.{js,ts,jsx,tsx}";
 
 @theme {
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --color-brand: #2563eb;
-  --color-brand-dark: #1d4ed8;
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+
+  --color-primary: #14b8a6;
+  --color-primary-hover: #0d9488;
+  --color-primary-active: #0f766e;
+  --color-primary-light: #ccfbf1;
+  --color-primary-bg: #f0fdfa;
+
+  --color-sidebar: #020617;
+  --color-header: #111827;
+  --color-background: #f8fafc;
+  --color-surface: #ffffff;
+  --color-border: #e2e8f0;
+  --color-text: #0f172a;
+  --color-body: #334155;
+
+  --color-brand: #14b8a6;
+  --color-brand-dark: #0d9488;
+}
+
+html {
+  scroll-behavior: auto;
 }
 
 body {
-  @apply bg-white text-gray-900 antialiased;
+  @apply bg-background text-text antialiased;
   font-family: var(--font-sans);
 }
 
-@keyframes fade-in {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+::selection {
+  background: color-mix(in srgb, var(--color-primary) 28%, white);
+  color: var(--color-text);
 }
 
-.animate-fade-in {
-  animation: fade-in 0.4s ease-out forwards;
+/* Premium utilities */
+.nk-container {
+  @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+}
+
+.nk-section {
+  @apply relative py-20 sm:py-24 lg:py-28;
+}
+
+.nk-glass {
+  background: color-mix(in srgb, white 72%, transparent);
+  backdrop-filter: blur(16px);
+  border: 1px solid color-mix(in srgb, white 55%, var(--color-border));
+}
+
+.nk-card {
+  @apply rounded-2xl border border-border bg-surface shadow-[0_8px_30px_rgb(15,23,42,0.06)];
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+}
+
+.nk-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px rgb(15 23 42 / 0.1);
+}
+
+.nk-gradient-text {
+  background: linear-gradient(135deg, #0f766e 0%, #14b8a6 45%, #2dd4bf 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.nk-noise {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.nk-grid-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgb(148 163 184 / 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(148 163 184 / 0.08) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
+}
+
+@keyframes nk-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes nk-float-slow {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-14px) rotate(0.5deg); }
+}
+
+@keyframes nk-pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgb(20 184 166 / 0.35); }
+  50% { box-shadow: 0 0 0 10px rgb(20 184 166 / 0); }
+}
+
+@keyframes nk-gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes nk-chart-draw {
+  from { stroke-dashoffset: 120; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes nk-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.animate-nk-float {
+  animation: nk-float 5s ease-in-out infinite;
+}
+
+.animate-nk-float-slow {
+  animation: nk-float-slow 7s ease-in-out infinite;
+}
+
+.animate-nk-float-delay {
+  animation: nk-float 6s ease-in-out infinite;
+  animation-delay: 1.2s;
+}
+
+.animate-nk-glow {
+  animation: nk-pulse-glow 2.8s ease-in-out infinite;
+}
+
+.animate-nk-gradient {
+  background-size: 200% 200%;
+  animation: nk-gradient-shift 12s ease infinite;
+}
+
+.animate-nk-chart {
+  stroke-dasharray: 120;
+  animation: nk-chart-draw 1.8s ease forwards;
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+/* Swiper tweaks */
+.nk-gallery-swiper .swiper-pagination-bullet {
+  background: #94a3b8;
+  opacity: 1;
+}
+
+.nk-gallery-swiper .swiper-pagination-bullet-active {
+  background: #14b8a6;
+  width: 24px;
+  border-radius: 999px;
 }

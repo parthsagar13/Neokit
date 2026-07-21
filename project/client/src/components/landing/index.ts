@@ -1,0 +1,15 @@
+export { SmoothScroll } from './SmoothScroll';
+export { LandingNavbar } from './LandingNavbar';
+export { LandingFooter } from './LandingFooter';
+export { HeroSection } from './HeroSection';
+export { TrustedSection } from './TrustedSection';
+export { ShowcaseSection } from './ShowcaseSection';
+export { FeaturesSection } from './FeaturesSection';
+export { ComponentsSection } from './ComponentsSection';
+export { CustomizerSection } from './CustomizerSection';
+export { ModulesSection } from './ModulesSection';
+export { GallerySection } from './GallerySection';
+export { WhySection } from './WhySection';
+export { ReviewsSection } from './ReviewsSection';
+export { FaqSection } from './FaqSection';
+export { PurchaseSection } from './PurchaseSection';
